@@ -1,0 +1,15 @@
+#oc create -f @project.build.directory@/openshift/route.yml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: @project.artifactId@-route
+  labels:
+    zone: map
+spec:
+  to:
+    kind: Service
+    name: @project.artifactId@
+    weight: 100
+  tls:
+    termination: edge
+  wildcardPolicy: None
