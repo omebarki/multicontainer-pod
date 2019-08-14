@@ -5,42 +5,6 @@ metadata:
   name: @project.artifactId@-config
 data:
   application.yaml: |+
-    server2:
-      ssl:
-        key-store: classpath:saml/samlKeystore.jks
-        # The password used to generate the certificate
-        key-store-password: nalle123
-        # The alias mapped to the certificate
-        key-alias: omarserver
-
-    security:
-      require-ssl: false
-
-    authentication:
-      saml:
-        idp:
-          metadata-url: /federationmetadata.xml
-        sp:
-          entity-id: https://springboot-saml-route-prj-sandbox1.cloudapps.map.intra.bpce-it.fr/adfs/service/trust
-          auth:
-            login-success-url: /landing
-            login-failure-url: /error
-            logout-success-url: /
-
-
-    #
-    #logs
-    #
-    logging:
-      level:
-        org:
-          springframework:
-            security:
-              saml: DEBUG
-          opensaml: DEBUG
-        com:
-          vdenotaris:
-            spring:
-              boot:
-                security:
-                  saml: DEBUG
+    server:
+      port: 8080
+    server.hello.url: http://127.0.0.1:8081/hello

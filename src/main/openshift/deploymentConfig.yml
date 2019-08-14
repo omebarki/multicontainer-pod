@@ -18,32 +18,31 @@ spec:
               name: multicontainer-server-config-volume
           resources:
             limits:
-              cpu: 600m
+              #cpu: 600m
               memory: 200Mi
             requests:
-              cpu: 600m
+              #cpu: 600m
               memory: 200Mi
         - name: "multicontainer-client"
-            image: "@docker.remote.registry@/multicontainer-client"
-            volumeMounts:
-              - mountPath: /app/config
-                name: multicontainer-client-config-volume
-            resources:
-              limits:
-                cpu: 600m
-                memory: 200Mi
-              requests:
-                cpu: 600m
-                memory: 200Mi
-            volumes:
-              - configMap:
-                  defaultMode: 420
-                  name: multicontainer-server-config
-                  items:
-                    - key: application.yaml
-                      path: application.yaml
-                name: @project.artifactId@-config-volume
+          image: "@docker.remote.registry@/multicontainer-client"
+          volumeMounts:
+            - mountPath: /app/config
+              name: multicontainer-client-config-volume
+          resources:
+            limits:
+              #cpu: 600m
+              memory: 200Mi
+            requests:
+              #cpu: 600m
+              memory: 200Mi
       volumes:
+        - configMap:
+            defaultMode: 420
+            name: multicontainer-client-config
+            items:
+              - key: application.yaml
+                path: application.yaml
+          name: multicontainer-client-config-volume
         - configMap:
             defaultMode: 420
             name: multicontainer-server-config
@@ -53,17 +52,23 @@ spec:
           name: multicontainer-server-config-volume
   replicas: 1
   triggers:
-    - type: "ConfigChange"
-    - type: "ImageChange"
-      imageChangeParams:
+    - imageChangeParams:
         automatic: true
         containerNames:
-          - "@project.artifactId@"
+          - multicontainer-server
         from:
-          kind: "ImageStreamTag"
-          name: "@project.artifactId@:@project.version@"
+          kind: ImageStreamTag
+          name: 'multicontainer-server:@project.version@'
+      type: ImageChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - multicontainer-client
+        from:
+          kind: ImageStreamTag
+          name: 'multicontainer-client:@project.version@'
+      type: ImageChange
+    - type: ConfigChange
   strategy:
     type: "Rolling"
   paused: false
-  revisionHistoryLimit: 2
-  minReadySeconds: 0 

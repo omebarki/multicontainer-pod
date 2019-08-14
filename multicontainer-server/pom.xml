@@ -9,5 +9,22 @@
 	</parent>
 	<artifactId>multicontainer-server</artifactId>
 	<name>multicontainer-server</name>
-
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>docker-build-push</id>
+						<phase>install</phase>
+						<goals>
+							<goal>build</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

@@ -18,9 +18,10 @@
     <properties>
         <java.version>1.8</java.version>
 
-        <docker.remote.registry>picnex000.dom101.mapres:8084/bpcesa/siq</docker.remote.registry>
-        <docker.image.from>socle-bpceit-jdk:1.8.0-1</docker.image.from>
+        <docker.remote.registry>tadartiw</docker.remote.registry>
+        <docker.image.from>adoptopenjdk/openjdk8:latest</docker.image.from>
         <docker.image.name>${docker.remote.registry}/${project.artifactId}:${project.version}</docker.image.name>
+        <app.config.dir>/app/config</app.config.dir>
     </properties>
 
     <modules>
@@ -89,10 +90,9 @@
                                     <exec>
                                         <arg>java</arg>
                                         <arg>-Xmx1G</arg>
-                                        <arg>-Dloader.path=/app/config</arg>
+                                        <arg>-Dloader.path=${app.config.dir}</arg>
                                         <arg>-jar</arg>
                                         <arg>/app/lib/${project.build.finalName}.${project.packaging}</arg>
-                                        <arg>--debug</arg>
                                     </exec>
                                 </entryPoint>
                                 <assembly>
@@ -109,16 +109,6 @@
                         </image>
                     </images>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>docker-build-push</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
